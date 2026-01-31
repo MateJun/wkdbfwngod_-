@@ -28,9 +28,43 @@
 - **대회 노트북**: RTX 4050 Laptop
 
 ### 소프트웨어
-- Python 3.9
-- OpenCV 4.x
-- NumPy
+- Python 3.9+
+- CUDA 12.4 (GPU 가속용)
+
+## 📦 패키지 설치
+
+### 필수 패키지 (requirements.txt)
+```bash
+pip install -r requirements.txt
+```
+
+또는 개별 설치:
+```bash
+# PyTorch (CUDA 12.4)
+pip install torch==2.6.0+cu124 torchvision==0.21.0+cu124 --index-url https://download.pytorch.org/whl/cu124
+
+# 기타 패키지
+pip install opencv-python==4.12.0.88
+pip install numpy==2.3.5
+pip install pyserial==3.5
+pip install ultralytics==8.4.6
+pip install onnxruntime-gpu==1.23.2
+pip install pywin32==311
+pip install pygrabber==0.2
+```
+
+### 패키지 버전 목록
+| 패키지 | 버전 | 용도 |
+|--------|------|------|
+| torch | 2.6.0+cu124 | UFLD 차선 인식 모델 |
+| torchvision | 0.21.0+cu124 | ResNet 백본 |
+| opencv-python | 4.12.0.88 | 영상 처리, 카메라 제어 |
+| numpy | 2.3.5 | 수치 연산 |
+| pyserial | 3.5 | 아두이노 시리얼 통신 |
+| ultralytics | 8.4.6 | YOLOv8 장애물 감지 |
+| onnxruntime-gpu | 1.23.2 | HitNet 스테레오 매칭 |
+| pywin32 | 311 | Windows COM 인터페이스 |
+| pygrabber | 0.2 | 카메라 ID 탐색 |
 
 ## 🚀 사용 방법
 

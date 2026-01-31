@@ -1,0 +1,106 @@
+================================================================================
+자율주행 시스템 - 모델 설치 가이드
+================================================================================
+
+이 프로젝트는 3개의 AI 모델이 필요합니다.
+아래 경로에 정확히 배치해야 run_ufld_drive.py가 작동합니다.
+
+================================================================================
+1. UFLD 차선 인식 모델 (Ultra-Fast-Lane-Detection-v2)
+================================================================================
+
+파일명: tusimple_res18.pth
+크기: 약 42MB
+저장 경로: Ultra-Fast-Lane-Detection-v2/weights/tusimple_res18.pth
+
+다운로드 방법:
+  - GitHub: https://github.com/cfzd/Ultra-Fast-Lane-Detection-v2
+  - Google Drive (공식): https://drive.google.com/file/d/1Clnj9-dLz81S3wXi_PiVdf7C-MHmxBN_/view
+  - 모델명: tusimple_res18.pth (TuSimple 데이터셋, ResNet-18 백본)
+
+설치:
+  git clone https://github.com/cfzd/Ultra-Fast-Lane-Detection-v2.git
+  mkdir -p Ultra-Fast-Lane-Detection-v2/weights
+  # 위 Google Drive에서 다운로드 후 weights 폴더에 배치
+
+================================================================================
+2. HitNet 스테레오 깊이 모델 (ONNX)
+================================================================================
+
+파일명: model_float32_opt.onnx
+크기: 약 1.8GB
+저장 경로: models/eth3d/saved_model_480x640/model_float32_opt.onnx
+
+다운로드 방법:
+  - GitHub: https://github.com/PINTO0309/PINTO_model_zoo
+  - 모델 번호: 142_HITNET
+  - 해상도: 480x640 버전 사용
+
+설치 (PINTO model zoo 사용):
+  pip install gdown
+  git clone https://github.com/PINTO0309/PINTO_model_zoo.git
+  cd PINTO_model_zoo/142_HITNET
+  ./download_eth3d.sh
+  # 생성된 saved_model_480x640 폴더를 models/eth3d/ 아래로 복사
+
+또는 직접 다운로드:
+  https://github.com/PINTO0309/PINTO_model_zoo/tree/main/142_HITNET
+
+================================================================================
+3. YOLOv8 장애물 감지 모델
+================================================================================
+
+파일명: yolov8n.pt
+크기: 약 6MB
+저장 경로: ./yolov8n.pt (프로젝트 루트)
+
+다운로드 방법:
+  ultralytics 패키지 설치 후 자동 다운로드됨
+
+설치:
+  pip install ultralytics==8.4.6
+  python -c "from ultralytics import YOLO; YOLO('yolov8n.pt')"
+  # 자동으로 yolov8n.pt 다운로드됨
+
+================================================================================
+4. 캘리브레이션 데이터 (이미 포함됨)
+================================================================================
+
+파일명: calibration_data_720p60.npz
+설명: 스테레오 카메라 캘리브레이션 데이터
+주의: 카메라가 다르면 calib.py로 재캘리브레이션 필요
+
+================================================================================
+최종 폴더 구조
+================================================================================
+
+자율주행/
+├── run_ufld_drive.py
+├── requirements.txt
+├── yolov8n.pt                          ← YOLOv8 (자동 다운로드)
+├── calibration_data_720p60.npz         ← 캘리브레이션 (포함됨)
+├── Ultra-Fast-Lane-Detection-v2/
+│   └── weights/
+│       └── tusimple_res18.pth          ← UFLD 모델 (수동 다운로드)
+└── models/
+    └── eth3d/
+        └── saved_model_480x640/
+            └── model_float32_opt.onnx  ← HitNet 모델 (수동 다운로드)
+
+================================================================================
+run_ufld_drive.py 설정 수정 필요
+================================================================================
+
+파일 경로가 하드코딩되어 있으므로 팀원 PC에 맞게 수정 필요:
+
+# 65~68번째 줄
+CALIB_FILE = r"C:\Users\[사용자명]\Desktop\자율주행\calibration_data_720p60.npz"
+YOLO_MODEL = r"C:\Users\[사용자명]\Desktop\자율주행\yolov8n.pt"
+HITNET_MODEL = r"C:\Users\[사용자명]\Desktop\자율주행\models\eth3d\saved_model_480x640\model_float32_opt.onnx"
+UFLD_MODEL = r"C:\Users\[사용자명]\Desktop\자율주행\Ultra-Fast-Lane-Detection-v2\weights\tusimple_res18.pth"
+
+# 39~40번째 줄 - 카메라 ID (팀원 PC에서 find_camera_ids.py 실행 후 수정)
+LEFT_CAM_ID_STRING = r"USB\VID_046D&PID_08E5&MI_00\..."
+RIGHT_CAM_ID_STRING = r"USB\VID_046D&PID_08E5&MI_00\..."
+
+================================================================================

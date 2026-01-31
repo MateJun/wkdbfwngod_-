@@ -15,7 +15,7 @@ os.environ["OPENCV_VIDEOIO_MSMF_ENABLE_HW_TRANSFORMS"] = "0"
 # 설정
 # ============================================================
 LEFT_CAM = 0
-RIGHT_CAM = 2
+RIGHT_CAM = 1
 
 CHESSBOARD_SIZE = (8, 6)  # 내부 코너 (가로 9칸-1, 세로 7칸-1)
 SQUARE_SIZE = 30.0        # mm
@@ -46,8 +46,8 @@ print(f"사각형 크기: {SQUARE_SIZE}mm")
 # 카메라 연결
 # ============================================================
 print("\n[1/2] 카메라 연결...")
-cap_left = cv2.VideoCapture(LEFT_CAM, cv2.CAP_DSHOW)
-cap_right = cv2.VideoCapture(RIGHT_CAM, cv2.CAP_DSHOW)
+cap_left = cv2.VideoCapture(LEFT_CAM, cv2.CAP_MSMF)
+cap_right = cv2.VideoCapture(RIGHT_CAM, cv2.CAP_MSMF)
 
 if not cap_left.isOpened() or not cap_right.isOpened():
     print("  카메라 연결 실패!")
